@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
 using MVC.Models;
+using MVC.ViewModels;
 using Service.Implementations;
 
 namespace MVC.Controllers
@@ -23,18 +21,31 @@ namespace MVC.Controllers
         }
 
         [HttpPost]
-        public ActionResult Create(Pessoa pessoa)
+        public ActionResult Create(PessoaViewModel pessoaVM)
         {
             ModelState.Remove("Codigo");
             List<Pessoa> lista = new List<Pessoa>();
 
             if(ModelState.IsValid)
             {
-                PessoaService.Salvar(pessoa);
-                return View("List", PessoaService.Listar());
+                if (pessoaVM.Captha.Equals("123"))
+                {
+                    Pessoa pessoa = new Pessoa();
+                    pessoa.Codigo = pessoaVM.Codigo;
+                    pessoa.Cpf = pessoaVM.Cpf;
+                    pessoa.DataNascimento = pessoaVM.DataNascimento;
+                    pessoa.Nome = pessoaVM.Nome;
+                    pessoa.Sobrenome = pessoaVM.Sobrenome;
+                    pessoa.Email = pessoaVM.Email;
+                    pessoa.Telefone = pessoaVM.Telefone;
+
+                    PessoaService.Salvar(pessoa);
+                    return View("List", PessoaService.Listar());
+                }
+                return View(pessoaVM);
             }
             else
-                return View(pessoa);
+                return View(pessoaVM);
 
         }
 

@@ -1,5 +1,3 @@
-using MVC.Models;
-
 namespace MVC.Migrations
 {
     using System;
@@ -7,14 +5,14 @@ namespace MVC.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<MyContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<MVC.Models.MyContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(MyContext context)
+        protected override void Seed(MVC.Models.MyContext context)
         {
             //  This method will be called after migrating to the latest version.
 
