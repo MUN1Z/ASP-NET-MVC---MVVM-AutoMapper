@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Web.Mvc;
+using AutoMapper;
 using MVC.Models;
 using MVC.ViewModels;
 using Service.Implementations;
@@ -24,20 +25,12 @@ namespace MVC.Controllers
         public ActionResult Create(PessoaViewModel pessoaVM)
         {
             ModelState.Remove("Codigo");
-            List<Pessoa> lista = new List<Pessoa>();
 
             if(ModelState.IsValid)
             {
                 if (pessoaVM.Captha.Equals("123"))
                 {
-                    Pessoa pessoa = new Pessoa();
-                    pessoa.Codigo = pessoaVM.Codigo;
-                    pessoa.Cpf = pessoaVM.Cpf;
-                    pessoa.DataNascimento = pessoaVM.DataNascimento;
-                    pessoa.Nome = pessoaVM.Nome;
-                    pessoa.Sobrenome = pessoaVM.Sobrenome;
-                    pessoa.Email = pessoaVM.Email;
-                    pessoa.Telefone = pessoaVM.Telefone;
+                    var pessoa = Mapper.Map<PessoaViewModel, Pessoa>(pessoaVM);
 
                     PessoaService.Salvar(pessoa);
                     return View("List", PessoaService.Listar());
@@ -56,7 +49,11 @@ namespace MVC.Controllers
 
         public ActionResult Edit(int id)
         {
-            return View("Create", PessoaService.Obter(id));
+            var pessoa = PessoaService.Obter(id);
+            
+            var pessoaViewModel = Mapper.Map<Pessoa, PessoaViewModel> (pessoa);
+
+            return View("Create", pessoaViewModel);
         }
 
         [HttpPost]
